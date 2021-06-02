@@ -86,6 +86,16 @@ app.use(express.json())
     }, 10000)
  })
 
+ wss.on('close', function(ws){
+     console.log(" wss close");
+     console.log(ws)
+ })
+
+ wss.on('error', function(ws){
+    console.log(" wss error");
+    console.log(ws)
+})
+
  app.get('/',  (req, res) =>{
      res.send("Hello Buddy !!")
  })
@@ -99,7 +109,7 @@ app.use(express.json())
     // });
     res.send(req.body)
 //     res.end(JSON.stringify(req.body))
-    
+    console.log(wss.clients[0])
    wss.clients.forEach(client =>{      
         if(client.OPEN == 1  ){
             client.send(JSON.stringify(req.body))
