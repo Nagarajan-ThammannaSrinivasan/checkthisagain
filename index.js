@@ -79,6 +79,7 @@ app.use(express.json())
  wss.on("connection", function(ws){
     console.log('connected')
     ws.on('message', function(msg){
+         ws.send('__Pong__')
         console.log('msg received is ' + msg );         
     })
     setTimeout( function(){
