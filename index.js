@@ -98,9 +98,14 @@ app.use(express.json())
     //    res.end( data );
     // });
     res.send(req.body)
-    res.end(JSON.stringify(req.body))
+//     res.end(JSON.stringify(req.body))
     
-    wss.clients.forEach(client =>{        
-        client.send(JSON.stringify(req.body))
+   wss.clients.forEach(client =>{      
+        if(client.OPEN == 1  ){
+            client.send(JSON.stringify(req.body))
+        }
+        else{
+            console.log("CLOSED")
+        }
     })
 })
