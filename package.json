@@ -1,0 +1,19 @@
+{
+  "name": "wsserver",
+  "version": "1.0.0",
+  "description": "test websocket server",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "naga",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "oracledb": "^5.1.0",
+    "ws": "^7.4.6"
+  },
+  "engines": {
+    "node" : "12.14.1"
+  }
+}
