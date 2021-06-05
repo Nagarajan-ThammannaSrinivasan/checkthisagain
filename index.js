@@ -61,15 +61,41 @@ var standardPayload = {
         msg = JSON.parse(msg); 
         ws.platform = msg.platform == "Browser" ? "Browser" : "Mobile";
         console.log(ws.platform)
-        // When client gets connected, send back their Id
-        standardPayload ={
-            platform : ws.platform,
-            msgType : "ClientID",
-            data:{
-                ID : ws.id
+
+        if(msg.msgType == 'NewClient'){
+            // When client gets connected, send back their Id
+            standardPayload ={
+                platform : ws.platform,
+                msgType : "NewClient",
+                data:{
+                    ID : ws.id
+                }
             }
+            ws.send(JSON.stringify(standardPayload));
         }
-        ws.send(JSON.stringify(standardPayload));
+        else if(msg.msgType == 'Message'){
+            wss.clients.forEach(client =>{
+                standardPayload ={
+                    platform : ws.platform,
+                    msgType : "Message",
+                    data:{
+                        ID : ws.id,
+                        Notification : msg.data.Notification
+                    }
+                }
+                client.send(JSON.stringify(standardPayload));
+            })
+            // standardPayload ={
+            //     platform : ws.platform,
+            //     msgType : "Message",
+            //     data:{
+            //         ID : ws.id,
+            //         Notification : msg.data.Notification
+            //     }
+            // }
+            // ws.send(JSON.stringify(standardPayload));
+        }
+        
 
         // var cur_Time = new Date();
         // console.log(cur_Time.getHours() + ':'+ cur_Time.getMinutes() + ":" + cur_Time.getSeconds() + ":"  + msg );         
