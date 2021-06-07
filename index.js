@@ -61,6 +61,7 @@ var standardPayload = {
         msg = JSON.parse(msg); 
         ws.platform = msg.platform == "Browser" ? "Browser" : "Mobile";
         console.log(ws.platform)
+        console.log(msg)
 
         if(msg.msgType == 'NewClient'){
             // When client gets connected, send back their Id
@@ -95,6 +96,23 @@ var standardPayload = {
             // }
             // ws.send(JSON.stringify(standardPayload));
         }
+        else if(msg.msgType == 'Geolocation'){
+            wss.clients.forEach(client =>{   
+                if(client.id == msg.data.clientID){
+                    client.geolocation = {
+                        lat : msg.data.lat,
+                        lng : msg.data.lng
+                    }
+                    // console.log(client.geolocation)
+                } 
+                if(client.OPEN == 1  ){
+                    client.send(JSON.stringify(msg))
+                }
+                else{
+                    console.log(client.id + " CLOSED")
+                }
+            })
+        }
         
 
         // var cur_Time = new Date();
@@ -111,6 +129,19 @@ var standardPayload = {
         // connectedClients.forEach(x =>{
         //     console.log(x.id )
         // })
+        wss.clients.forEach(client =>{
+            if(client.id != ws.id){
+                standardPayload ={
+                    platform : ws.platform,
+                    msgType : "Message",
+                    data:{
+                        ID : ws.id,
+                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.id 
+                    }
+                }
+                client.send(JSON.stringify(standardPayload))
+            }
+        })
     })
    
    // When client gets errored
@@ -147,7 +178,7 @@ var standardPayload = {
         if(client.id == incomingPayload.data.clientID){
             client.geolocation = {
                 lat : incomingPayload.data.lat,
-                long : incomingPayload.data.long
+                lng : incomingPayload.data.lng
             }
             // console.log(client.geolocation)
         } 
