@@ -99,14 +99,15 @@ var standardPayload = {
         }
         else if(msg.msgType == 'Geolocation'){
             wss.clients.forEach(client =>{   
-                if(client.id == msg.data.clientID){
+                if(client.id == msg.data.Client_ID){
                     //Assign data
                     client.geolocation = {
                         lat : msg.data.lat,
                         lng : msg.data.lng
                     }
                     client.contactNumber = msg.data.Driver_Contact_No
-                    console.log('Contact Number' + client.contactNumber )
+                    console.log(client)
+                    console.log(client.id + 's Contact Number' +  client.contactNumber)
                 } 
                 if(client.OPEN == 1  ){
                     client.send(JSON.stringify(msg))
@@ -126,7 +127,6 @@ var standardPayload = {
     ws.on('close', function(){
         console.log(this.id + " closed");
         var indexClientID = connectedClients.indexOf(this);
-        console.log('contact' + ws.contactNumber);
         connectedClients.splice(indexClientID, 1);
         // console.log("length " + connectedClients.length);
         // connectedClients.forEach(x =>{
@@ -139,7 +139,7 @@ var standardPayload = {
                     msgType : "Message",
                     data:{
                         ID : ws.id,
-                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.contactNumber 
+                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + client.contactNumber 
                     }
                 }
                 client.send(JSON.stringify(standardPayload))
