@@ -106,6 +106,7 @@ var standardPayload = {
                         lng : msg.data.lng
                     }
                     ws.contactNumber = msg.data.Driver_Contact_No
+                    console.log(ws)
                     console.log('Contact Number' +  msg.data.Driver_Contact_No )
                 } 
                 if(client.OPEN == 1  ){
