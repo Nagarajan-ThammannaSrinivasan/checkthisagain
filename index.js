@@ -101,12 +101,12 @@ var standardPayload = {
             wss.clients.forEach(client =>{   
                 if(client.id == msg.data.clientID){
                     //Assign data
-                    client.geolocation = {
+                    ws.geolocation = {
                         lat : msg.data.lat,
                         lng : msg.data.lng
                     }
-                    client.contactNumber = msg.data.Driver_Contact_No
-                    console.log('Contact Number' + client.contactNumber )
+                    ws.contactNumber = msg.data.Driver_Contact_No
+                    console.log('Contact Number' +  msg.data.Driver_Contact_No )
                 } 
                 if(client.OPEN == 1  ){
                     client.send(JSON.stringify(msg))
