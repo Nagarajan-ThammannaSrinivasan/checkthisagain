@@ -105,7 +105,7 @@ var standardPayload = {
                         lat : msg.data.lat,
                         lng : msg.data.lng
                     }
-                    client.id.contactNumber = msg.data.Driver_Contact_No
+                    client.contactNumber = msg.data.Driver_Contact_No
                     // console.log(client.geolocation)
                 } 
                 if(client.OPEN == 1  ){
@@ -139,7 +139,7 @@ var standardPayload = {
                     msgType : "Message",
                     data:{
                         ID : ws.id,
-                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.Driver_Contact_No 
+                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.contactNumber 
                     }
                 }
                 client.send(JSON.stringify(standardPayload))
