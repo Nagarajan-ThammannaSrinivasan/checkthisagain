@@ -37,20 +37,21 @@ var standardPayload = {
     data : {}
 }
 
+
  wss.on("connection", function(ws, req){
     // Create Id for each connected Client
-    ws.id = Date.now() + Math.random();
+    ws.id = 'user_' + Math.random();
     // Push all clients into a list
     connectedClients.push(ws);
     
     ws.on('ping', function(data){
         console.log('onping');
-        console.log(data)
+        console.log(connectedClients.length)
     })
 
     ws.on('pong', function(data){
         console.log('onpong');
-        console.log(data)
+        // console.log(connectedClients.length);
     })
     // connectedClients.forEach(x =>{
     //     console.log(x.id )
@@ -60,7 +61,7 @@ var standardPayload = {
     ws.on('message', function(msg){ 
         msg = JSON.parse(msg); 
         ws.platform = msg.platform == "Browser" ? "Browser" : "Mobile";
-        console.log(ws.platform)
+        // console.log(ws.platform)
         console.log(msg)
 
         if(msg.msgType == 'NewClient'){
@@ -99,10 +100,12 @@ var standardPayload = {
         else if(msg.msgType == 'Geolocation'){
             wss.clients.forEach(client =>{   
                 if(client.id == msg.data.clientID){
+                    //Assign data
                     client.geolocation = {
                         lat : msg.data.lat,
                         lng : msg.data.lng
                     }
+                    client.id.contactNumber = msg.data.Driver_Contact_No
                     // console.log(client.geolocation)
                 } 
                 if(client.OPEN == 1  ){
@@ -130,13 +133,13 @@ var standardPayload = {
         //     console.log(x.id )
         // })
         wss.clients.forEach(client =>{
-            if(client.id != ws.id){
+            if(client.id != ws.id && client.platform != 'Mobile'){
                 standardPayload ={
                     platform : ws.platform,
                     msgType : "Message",
                     data:{
                         ID : ws.id,
-                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.id 
+                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.Driver_Contact_No 
                     }
                 }
                 client.send(JSON.stringify(standardPayload))
