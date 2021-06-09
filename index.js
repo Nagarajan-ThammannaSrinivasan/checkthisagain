@@ -106,7 +106,7 @@ var standardPayload = {
                         lng : msg.data.lng
                     }
                     client.contactNumber = msg.data.Driver_Contact_No
-                    console.log(client.contactNumber)
+                    console.log('Contact Number' + client.contactNumber )
                 } 
                 if(client.OPEN == 1  ){
                     client.send(JSON.stringify(msg))
