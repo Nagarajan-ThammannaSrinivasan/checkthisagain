@@ -106,7 +106,7 @@ var standardPayload = {
                         lng : msg.data.lng
                     }
                     client.contactNumber = msg.data.Driver_Contact_No
-                    // console.log(client.geolocation)
+                    console.log(client.contactNumber)
                 } 
                 if(client.OPEN == 1  ){
                     client.send(JSON.stringify(msg))
@@ -126,7 +126,7 @@ var standardPayload = {
     ws.on('close', function(){
         console.log(this.id + " closed");
         var indexClientID = connectedClients.indexOf(this);
-        // console.log(indexClientID);
+        console.log('contact' + ws.contactNumber);
         connectedClients.splice(indexClientID, 1);
         // console.log("length " + connectedClients.length);
         // connectedClients.forEach(x =>{
