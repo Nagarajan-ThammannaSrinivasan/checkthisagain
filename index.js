@@ -1,4 +1,4 @@
-const { timeStamp } = require('console')
+const { timeStamp, Console } = require('console')
 const express = require('express')
 const http = require('http')
 const { stringify } = require('querystring')
@@ -102,6 +102,8 @@ var standardPayload = {
         }
         else if(msg.msgType == 'Geolocation'){
             wss.clients.forEach(client =>{   
+                console.log(client.id);
+                console.log(client.contactNumber);
                 if(client.id == msg.data.Client_ID){
                     //Assign data
                     client.geolocation = {
@@ -109,8 +111,10 @@ var standardPayload = {
                         lng : msg.data.lng
                     }
                     client.contactNumber = msg.data.Driver_Contact_No
-                    console.log(client)
-                    console.log(client.id + 's Contact Number' +  client.contactNumber)
+                    
+                    console.log(client.contactNumber);
+                    // console.log(client)
+                    // console.log(client.id + 's Contact Number' +  client.contactNumber)
                 } 
                 if(client.OPEN == 1  ){
                     client.send(JSON.stringify(msg))
@@ -142,7 +146,7 @@ var standardPayload = {
                     msgType : "Message",
                     data:{
                         ID : ws.id,
-                        Notification : ws.id + " : driver went off the grid. Do you want to call him ?. Call him at " + ws.contactNumber 
+                        Notification : ws.id + " : driver went off the grid. Call him at " + ws.contactNumber 
                     }
                 }
                 client.send(JSON.stringify(standardPayload))
