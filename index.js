@@ -40,7 +40,7 @@ var standardPayload = {
 
  wss.on("connection", function(ws, req){
     // Create Id for each connected Client
-    ws.id = 'user_' + Math.random();
+    // ws.id = 'user_' + Math.random();
     // Push all clients into a list
     connectedClients.push(ws);
     
@@ -65,12 +65,13 @@ var standardPayload = {
         console.log(msg)
 
         if(msg.msgType == 'NewClient'){
-            // When client gets connected, send back their Id
+            // When client gets connected, Save thier ID
+            ws.id = msg.data.ID
             standardPayload ={
                 platform : ws.platform,
                 msgType : "NewClient",
                 data:{
-                    ID : ws.id
+                    ID : msg.data.ID
                 }
             }
             ws.send(JSON.stringify(standardPayload));
@@ -85,17 +86,19 @@ var standardPayload = {
                         Notification : msg.data.Notification
                     }
                 }
-                client.send(JSON.stringify(standardPayload));
+                if(msg.platform == "Mobile" && client.platform == "Browser"){
+                    // If message comes from Mobile send that to Browser
+                    client.send(JSON.stringify(standardPayload));
+                }
+                else if(msg.platform == "Browser" && client.platform == "Mobile" && msg.data.To == "AllMobile"){
+                    // If message comes from Browser send that to Mobile based on 'To' property of payload
+                    client.send(JSON.stringify(standardPayload));
+                }
+                else if(msg.platform == "Browser" && client.platform == "Mobile" && msg.data.To == client.id){
+                    // If message comes from Browser send that to Mobile based on 'To' property of payload
+                    client.send(JSON.stringify(standardPayload));
+                }
             })
-            // standardPayload ={
-            //     platform : ws.platform,
-            //     msgType : "Message",
-            //     data:{
-            //         ID : ws.id,
-            //         Notification : msg.data.Notification
-            //     }
-            // }
-            // ws.send(JSON.stringify(standardPayload));
         }
         else if(msg.msgType == 'Geolocation'){
             wss.clients.forEach(client =>{   
