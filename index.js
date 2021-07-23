@@ -146,7 +146,7 @@ var standardPayload = {
                     msgType : "Message",
                     data:{
                         ID : ws.id,
-                        Notification : ws.id + " : driver went off the grid. Call him at " + ws.contactNumber 
+                        Notification : ws.id + " went off the grid. Call him at " + ws.contactNumber 
                     }
                 }
                 client.send(JSON.stringify(standardPayload))
